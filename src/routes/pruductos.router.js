@@ -3,17 +3,20 @@ import   express  from'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-const modoDB='archivos';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const router = Router();
 const datosAgregados={};
 
+const modoDB='memoria';
 
 let articulos=null
 if (modoDB==='archivos'){ 
   const Constructor=await import('../contenedor/contenedora.archivo.js')
   articulos=new Constructor.default(__dirname +'/../dao/productos/articulos.txt')
+}if (modoDB==='memoria'){ 
+  const Constructor=await import('../contenedor/contenedora.memoria.js')
+  articulos=new Constructor.default()
 }
 
 function isAdmin(req, res, next) {
