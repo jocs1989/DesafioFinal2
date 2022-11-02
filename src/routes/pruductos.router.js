@@ -1,37 +1,11 @@
 import { Router } from "express";
+import articulos from "../dao/productos/index.js"
 import express from "express";
-import config from "../config.js";
-import { fileURLToPath } from "url";
-import path from "path";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import {isAdmin} from "../middleware/permisos.js"
 const router = Router();
 const datosAgregados = {};
-const MODO_BD = config.MODO_BD.default;
-let articulos = null;
-if (config.MODO_BD.archivos === MODO_BD) {
-  const Constructor = await import("../dao/productos/productos.dao.archivo.js");
-  articulos = new Constructor.default(
-    __dirname + "/../dao/productos/articulos.txt"
-  );
-}
-if (config.MODO_BD.memoria == MODO_BD) {
-  const Constructor = await import("../contenedor/contenedora.memoria.js");
-  articulos = new Constructor.default();
-}
-if (config.MODO_BD.mongodb == MODO_BD) {
-  const Constructor = await import("../dao/productos/productos.dao.mongodb.js");
-  articulos = new Constructor.default();
-}
-function isAdmin(req, res, next) {
-  if (req.body.administrador) {
-    next();
-  } else {
-    res.status(403).json({
-      error: `-1,descripcion:  ruta ${req.url} método ${req.method}  no autorizada`,
-    });
-  }
-}
+
+
 
 router.get("/", async (req, res) => {
   try {
