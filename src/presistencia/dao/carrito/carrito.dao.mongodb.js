@@ -1,20 +1,12 @@
-import { promises as fsPromises, readFileSync, writeFileSync } from "fs";
+import { Collection, opcionSchema } from "../../models/carrito.models.js";
 
-import Contenedora from "../../contenedor/contenedora.archivo.js";
-import Productos from "../productos/productos.dao.archivo.js";
-import { fileURLToPath } from "url";
-import { isNumberObject } from "util/types";
-import path from "path";
+import Contenedora from "../../contenedor/contenedora.mongodb.js";
+import Productos from "../../dao/productos/index.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 class Carrito extends Contenedora {
   constructor() {
-    super(__dirname + "/carrito.txt");
-    this.productos = 0;
-    this.contenedor = {};
-    this.total = 0;
-    this.articulos = new Productos(__dirname + "/../productos/articulos.txt");
+    super(Collection, opcionSchema);
+    this.articulos = Productos
   }
   async setNewCar(id, cantidad) {
     try {
@@ -22,19 +14,12 @@ class Carrito extends Contenedora {
       this.contenedor = {};
       this.total = 0;
 
-      const todoProductos = await this.getAll();
-      let idAsignado = 0;
-
-      if (Number(todoProductos.length) === 0) {
-        idAsignado = 1;
-      } else {
-        idAsignado = Number(todoProductos.length) + 1;
-      }
-
+      const todoProductos = await this.getAll();    
       const object = await this.articulos.getById(id);
+     
       const precio = Number(object.precio);
       const stock = Number(object.stock);
-
+      console.log('que hay aqui'+precio)
       if (Number(object.stock) >= cantidad) {
         this.total = this.total + cantidad * precio;
         object.stock = stock - cantidad;
@@ -52,11 +37,11 @@ class Carrito extends Contenedora {
 
         this.productos++;
 
-        this.contenedor.id = idAsignado;
+        
 
-        console.log(this.contenedor);
+     
         todoProductos.push(this.contenedor);
-        return await this.save(todoProductos);
+        return await this.save({carrito:todoProductos});
       } else {
         console.log("lo sentimos no hay stock");
       }

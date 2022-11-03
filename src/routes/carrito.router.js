@@ -1,5 +1,5 @@
-import Carrito from "../presistencia/dao/carrito/carrito.dao.archivo.js";
 import { Router } from "express";
+import carrito from "../presistencia/dao/carrito/index.js";
 import express from "express";
 import { fileURLToPath } from "url";
 import { isAdmin } from "../middleware/permisos.js";
@@ -8,7 +8,7 @@ import path from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const router = Router();
-const carrito = new Carrito();
+
 
 router.post("/", async (req, res) => {
   try {
