@@ -1,2 +1,7 @@
-MODO_BD=
-MONGO_DB_URI=
+//config MONGODB
+MONGO_DB_USER=
+MONGO_DB_PASSWORD=
+MONGO_DB="ecommerce"
+//config FIREBASE
+GOOGLE_APPLICATION_CREDENTIALS="..../archivoconclave.json"
+FIREBASE_URL="https://"
