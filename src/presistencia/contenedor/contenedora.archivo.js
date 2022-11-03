@@ -29,10 +29,10 @@ class Contenedora {
       this.busqueda = this.datos.find((object) => {
         if (object.id == producto.id) {
           object.id = Number(producto.id);
-          object.timestamp=Date.now();
+          object.timestamp = Date.now();
           object.nombre = producto.nombre;
-          object.descripcion=producto.descripcion;
-          object.codigo=producto.codigo;
+          object.descripcion = producto.descripcion;
+          object.codigo = producto.codigo;
           object.url = producto.url;
           object.precio = Number(producto.precio);
           object.stock = Number(producto.stock);
@@ -42,31 +42,29 @@ class Contenedora {
       });
       console.log(
         `se acualizo el id:${this.busqueda.id} ::${this.busqueda.title}`
-      );    
+      );
       writeFileSync(this.nombre, JSON.stringify(this.datos, null, 2));
       return this.busqueda;
-    } catch (err) {     
+    } catch (err) {
       throw new Error(err);
     }
   }
   async getById(id) {
     try {
-      
       const archivo = await fsPromises.readFile(this.nombre, "utf-8");
       this.datos = [...JSON.parse(archivo)];
       this.busqueda = this.datos.find((object) => {
-        
         if (Number(object.id) === Number(id)) {
           return object;
         }
       });
-      if(this.busqueda === undefined ){
-        console.log('Entro')
-        throw new Error('No existe el producto')
-       }
+      if (this.busqueda === undefined) {
+        console.log("Entro");
+        throw new Error("No existe el producto");
+      }
 
-      return  this.busqueda;
-    } catch (err) {      
+      return this.busqueda;
+    } catch (err) {
       throw new Error(err);
     }
   }
@@ -107,7 +105,6 @@ class Contenedora {
       console.log(this.Random);
       return this.Random;
     } catch (err) {
-   
       throw new Error(err);
     }
   }
@@ -116,7 +113,6 @@ class Contenedora {
     let content = readFileSync(this.nombre, "utf8");
     this.dataTxt = [...JSON.parse(content)];
     return this.dataTxt;
-  
   } // end  getAll
 
   async deleteById(id) {
@@ -142,7 +138,7 @@ class Contenedora {
         console.log(
           `Eliminando...  id:${eliminado[0].id}::${eliminado[0].title}`
         );
-        return eliminado[0]
+        return eliminado[0];
       }
     } catch (err) {
       throw new Error(err);
@@ -153,12 +149,18 @@ class Contenedora {
   deleteAll() {
     try {
       writeFileSync(this.nombre, "[]", null, 2);
-   
     } catch (err) {
       console.error(err);
       return err;
     }
   } //end deleteAll
+  async saveAdd(datos) {
+    try {
+      writeFileSync(this.nombre, JSON.stringify(datos, null, 2));
+    } catch (err) {
+      writeFileSync(this.nombre, JSON.stringify([], null, 2));
+    }
+  }
 }
 
 export default Contenedora;

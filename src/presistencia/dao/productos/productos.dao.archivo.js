@@ -5,6 +5,7 @@ class Productos  extends Contenedora {
 
       super(nombre);
       
+      
     }
 }
 

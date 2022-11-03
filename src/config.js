@@ -6,10 +6,11 @@ const config = {
   MODO_BD: {
     memoria: "memoria",
     archivos: "archivos",
-    mongodb: "mongodb"
+    mongodb: "mongodb",
+    firebase:"firebase"
   },
   MONGO_DB: {
-    uri: process.env.MONGO_DB_URI
+    uri: `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.hm73cnb.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
   },
 };
 

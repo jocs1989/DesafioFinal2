@@ -1,19 +1,45 @@
-import mongoose from "mongoose";
-import config from "../config.js";
+import admin from "firebase-admin";
+import config from "../../config.js";
+
 class Contenedora {
-  constructor(nombre, opcionSchema) {
+  constructor() {
+
     this.datos = [];
-    this.uri = config.MONGO_DB.uri;
+
+
+admin.initializeApp({
+  credential: admin.credential.cert(process.env.GOOGLE_APPLICATION_CREDENTIALS),
+  databaseURL:process.env.FIREBASE_URL
+});   
+
+  console.log('Base conectada')
    
-    const { Schema } = mongoose;
-    this.productosSchema = new Schema(opcionSchema);
-    this.conn = mongoose.createConnection(this.uri);
-    this.bd = this.conn.model(nombre,this.productosSchema);
+    this.query = admin.firestore().collection('Productos')
+    ;
   }
 
   async save(object) {
-    await new this.bd(object).save();
-    return this.bd.find(object);
+     this.query.doc().create(object);
+    const data =await this.query.where("codigo","==",object.codigo).get();
+   let re=null
+    await data.forEach((querySnapshot) => {
+    
+    re={
+         nombre: querySnapshot.data().nombre,
+         descripcion: querySnapshot.data().descripcion,
+         codigo: querySnapshot.data().codigo,
+         url: querySnapshot.data().url,
+         precio: querySnapshot.data().precio,
+         stock: querySnapshot.data().stock
+         
+       }
+      }
+  
+    
+    );
+    console.log(re)
+    return re
+     
   }
 
   async updateById(producto) {
@@ -28,8 +54,8 @@ class Contenedora {
   async getAll() {
     try {
       
-      
-      return await this.bd.find({ });
+      console.log('Entro')
+      return await this.query.doc().get()
     } catch (err) {
       throw new Error(err);
     }

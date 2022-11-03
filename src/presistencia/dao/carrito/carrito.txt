@@ -1,0 +1,27 @@
+[
+  {
+    "1": {
+      "nombre": "Regla",
+      "descripcion": "Regla de plastico de 30 cm",
+      "codigo": 25233,
+      "url": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
+      "precio": 125.53,
+      "stock": 15,
+      "id": 1,
+      "timestamp": 1667434663292,
+      "cantidad": 10
+    },
+    "4": {
+      "nombre": "Regla",
+      "descripcion": 125.53,
+      "codigo": 25233,
+      "url": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
+      "precio": 125.53,
+      "stock": 45,
+      "id": 4,
+      "timestamp": 1665494714021,
+      "cantidad": 2
+    },
+    "id": 4
+  }
+]

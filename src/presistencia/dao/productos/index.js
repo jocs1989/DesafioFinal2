@@ -1,4 +1,4 @@
-import config from "../../config.js";
+import config from "../../../config.js";
 import { fileURLToPath } from "url";
 import path from "path";
 
@@ -21,5 +21,8 @@ if (config.MODO_BD.mongodb == MODO_BD) {
   const Constructor = await import("./productos.dao.mongodb.js");
   articulos = new Constructor.default();
 }
-
+if (config.MODO_BD.firebase == MODO_BD) {
+  const Constructor = await import("./productos.dao.firebase.js");
+  articulos = new Constructor.default();
+}
 export default articulos; 

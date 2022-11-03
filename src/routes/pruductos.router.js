@@ -1,11 +1,9 @@
 import { Router } from "express";
-import articulos from "../dao/productos/index.js"
+import articulos from "../presistencia/dao/productos/index.js"
 import express from "express";
 import {isAdmin} from "../middleware/permisos.js"
 const router = Router();
 const datosAgregados = {};
-
-
 
 router.get("/", async (req, res) => {
   try {

@@ -6,7 +6,11 @@
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "mongo": "MODO_BD='mongodb' nodemon src/server.js",
+    "archivo": "MODO_BD='archivo' nodemon src/server.js",
+    "memoria": "MODO_BD='memoria' nodemon src/server.js",
+    "firebase": "MODO_BD='firebase' nodemon src/server.js"
+
   },
   "repository": {
     "type": "git",
@@ -22,6 +26,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "firebase-admin": "^11.2.0",
     "mongodb": "^4.11.0",
     "mongoose": "^6.7.0",
     "nodemon": "^2.0.20"
