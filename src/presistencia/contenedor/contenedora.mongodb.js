@@ -19,7 +19,10 @@ class Contenedora {
 
   async updateById(producto) {
     try {
-      const filter = { _id: producto.id };
+      
+        const filter = { _id: producto.id };
+     
+      console.log('que hay aqui'+filter)
       await this.bd.findOneAndUpdate(filter, producto);
       return this.bd.findOne(filter);
     } catch (err) {

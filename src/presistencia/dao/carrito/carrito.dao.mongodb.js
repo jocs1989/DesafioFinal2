@@ -12,36 +12,17 @@ class Carrito extends Contenedora {
     try {
       this.productos = 0;
       this.contenedor = {};
-      this.total = 0;
-
-      const todoProductos = await this.getAll();    
+      this.total = 0;         
       const object = await this.articulos.getById(id);
-     
       const precio = Number(object.precio);
       const stock = Number(object.stock);
-      console.log('que hay aqui'+precio)
+      console.log('que hay aqui'+Number(object.stock) )
       if (Number(object.stock) >= cantidad) {
         this.total = this.total + cantidad * precio;
         object.stock = stock - cantidad;
-        await this.articulos.updateById(object);
-        object.cantidad = cantidad;
-        if (this.contenedor[object.id] === undefined) {
-          this.contenedor[Number(object.id)] = object;
-        } else {
-          let cantidadVieja = object.cantidad;
-          object.cantidad = cantidadVieja + cantidad;
-          this.contenedor[Number(object.id)].cantidad =
-            cantidadVieja + cantidad;
-          this.contenedor[Number(object.id)] = object;
-        }
-
-        this.productos++;
-
-        
-
-     
-        todoProductos.push(this.contenedor);
-        return await this.save({carrito:todoProductos});
+        await this.articulos.updateById(object);  
+        object.stock=cantidad;
+        return await this.save({carrito:object,total:this.total});
       } else {
         console.log("lo sentimos no hay stock");
       }
@@ -52,41 +33,19 @@ class Carrito extends Contenedora {
 
   async setAddProductCar(idCarrito, idArticulo, cantidad) {
     try {
-      const todoProductos = await this.getAll();
+    const carritoViejo =await this.getById(idCarrito)
       const object = await this.articulos.getById(idArticulo);
       const precio = Number(object.precio);
       const stock = Number(object.stock);
-      const carritoViejo = await this.getAllCar(idCarrito);
-
+      this.total=carritoViejo.total;
       if (Number(object.stock) >= cantidad) {
         this.total = this.total + cantidad * precio;
         object.stock = stock - cantidad;
         await this.articulos.updateById(object);
-        object.cantidad = cantidad;
-        if (carritoViejo[object.id] === undefined) {
-          //this.contenedor[Number(object.id)] = object;
-          carritoViejo[Number(object.id)] = object;
-        } else {
-          let cantidadVieja = object.cantidad;
-          object.cantidad = cantidadVieja + cantidad;
-          //this.contenedor[Number(object.id)].cantidad = cantidadVieja + cantidad;
-          //this.contenedor[Number(object.id)] =object;
-          carritoViejo[Number(object.id)].cantidad = cantidadVieja + cantidad;
-          carritoViejo[Number(object.id)] = object;
-        }
-        this.productos++;
-        //this.contenedor.id=idCarrito
-
-        for (let i in todoProductos) {
-          if (Number(todoProductos[i].id) === Number(idCarrito)) {
-            carritoViejo.id = Number(idCarrito);
-            todoProductos[i] = carritoViejo;
-            console.log(todoProductos[i]);
-          }
-        }
-
-        this.saveAdd(todoProductos);
-        return carritoViejo;
+        object.stock = cantidad;
+        
+        this.updateById({id:idCarrito,total:this.total,'$push':{carrito:object}});
+        return await this.getById(idCarrito);
       } else {
         console.log("lo sentimos no hay stock");
       }
