@@ -45,7 +45,7 @@ class Carrito extends Contenedora {
         object.stock = cantidad;
         
         this.updateById({id:idCarrito,total:this.total,'$push':{carrito:object}});
-        return await this.getById(idCarrito);
+        return carritoViejo;
       } else {
         console.log("lo sentimos no hay stock");
       }
@@ -55,34 +55,20 @@ class Carrito extends Contenedora {
   }
   async setDellProductCar(idCarrito, idArticulo) {
     try {
-      const todoProductos = await this.getAll();
-      const object = await this.articulos.getById(Number(idArticulo));
-
+      
+      const object = await this.articulos.getById(idArticulo);
       const precio = Number(object.precio);
       const stock = Number(object.stock);
-      const carritoViejo = await this.getAllCar(Number(idCarrito));
-      const cantidad = carritoViejo[idArticulo].cantidad;
+      const carritoViejo =await this.getById(idCarrito)
+      
+     
+    
 
-      this.total = this.total - cantidad * precio;
-      object.stock = stock + cantidad;
-      await this.articulos.updateById(object);
-      object.cantidad = cantidad;
-      if (carritoViejo[object.id] !== undefined) {
-        delete carritoViejo[Number(object.id)];
-      }
-      this.productos++;
-      //this.contenedor.id=idCarrito
 
-      for (let i in todoProductos) {
-        if (Number(todoProductos[i].id) === Number(idCarrito)) {
-          carritoViejo.id = Number(idCarrito);
-          todoProductos[i] = carritoViejo;
-          console.log(todoProductos[i]);
-        }
-      }
+      
 
-      this.saveAdd(todoProductos);
-      return carritoViejo;
+      this.updateById({id:idCarrito,total:this.total,'$pull':{"carrito":{"_id":idArticulo}}});
+      return await this.getById(idCarrito);
     } catch (err) {
       throw new Error(err);
     }
