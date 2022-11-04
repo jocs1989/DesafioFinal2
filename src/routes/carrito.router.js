@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
 });
 router.delete("/:id", async (req, res) => {
   try {
-    await carrito.setDellCarById(Number(req.params.id));
+    await carrito.setDellCarById(req.params.id);
     res.status(200).json({});
   } catch (err) {
     console.error(err);
